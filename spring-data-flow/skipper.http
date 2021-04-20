@@ -1,0 +1,7 @@
+@SKIPPER=http://localhost:7577/
+### API
+
+GET {{SKIPPER}}/api/
+
+### Repositores
+GET {{SKIPPER}}/api/repositories
