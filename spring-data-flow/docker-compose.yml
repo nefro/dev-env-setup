@@ -30,6 +30,7 @@ services:
       MYSQL_ROOT_PASSWORD: rootpw
     expose:
       - 3306
+    # restart: unless-stopped
 
   kafka-broker:
     image: confluentinc/cp-kafka:5.5.2
@@ -45,6 +46,7 @@ services:
       - KAFKA_LOG4J_LOGGERS=org.apache.zookeeper=ERROR,org.apache.kafka=ERROR,kafka=ERROR,kafka.cluster=ERROR,kafka.controller=ERROR,kafka.coordinator=ERROR,kafka.log=ERROR,kafka.server=ERROR,kafka.zookeeper=ERROR,state.change.logger=ERROR
     depends_on:
       - zookeeper
+    # restart: unless-stopped
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.5.2
@@ -53,6 +55,7 @@ services:
       - "2181"
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
+    # restart: unless-stopped
 
   dataflow-server:
     image: springcloud/spring-cloud-dataflow-server:${DATAFLOW_VERSION:?DATAFLOW_VERSION is not set!}
@@ -81,6 +84,7 @@ services:
     entrypoint: "./wait-for-it.sh -t 180 skipper-server:7577 -- java -jar /maven/spring-cloud-dataflow-server.jar"
     volumes:
       - ${HOST_MOUNT_PATH:-.}:${DOCKER_MOUNT_PATH:-/root/scdf}
+    # restart: unless-stopped
 
   app-import:
     image: springcloud/baseimage:1.0.0
@@ -112,3 +116,4 @@ services:
     entrypoint: "./wait-for-it.sh mysql:3306 -- java -jar /maven/spring-cloud-skipper-server.jar"
     volumes:
       - ${HOST_MOUNT_PATH:-.}:${DOCKER_MOUNT_PATH:-/root/scdf}
+    restart: unless-stopped
